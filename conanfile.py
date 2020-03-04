@@ -9,7 +9,7 @@ import shutil
 
 class FFMpegConan(ConanFile):
     name = "ffmpeg"
-    version = "4.2"
+    version = "snapshot"
     url = "https://github.com/bincrafters/conan-ffmpeg"
     description = "A complete, cross-platform solution to record, convert and stream audio and video"
     # https://github.com/FFmpeg/FFmpeg/blob/master/LICENSE.md
@@ -102,7 +102,7 @@ class FFMpegConan(ConanFile):
     def source(self):
         source_url = "http://ffmpeg.org/releases/ffmpeg-%s.tar.bz2" % self.version
         tools.get(source_url,
-                  sha256="306bde5f411e9ee04352d1d3de41bd3de986e42e2af2a4c44052dce1ada26fb8")
+                  sha256="a0925b8b37a22cd1b03b79a223a9f57f0ba27ee46e12c7816340c803d78213a1")
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
