@@ -9,7 +9,7 @@ import shutil
 
 class FFMpegConan(ConanFile):
     name = "ffmpeg"
-    version = "4.2.2"
+    version = "4.3"
     url = "https://github.com/bincrafters/conan-ffmpeg"
     description = "A complete, cross-platform solution to record, convert and stream audio and video"
     # https://github.com/FFmpeg/FFmpeg/blob/master/LICENSE.md
@@ -102,7 +102,7 @@ class FFMpegConan(ConanFile):
     def source(self):
         source_url = "http://ffmpeg.org/releases/ffmpeg-%s.tar.bz2" % self.version
         tools.get(source_url,
-                  sha256="b620d187c26f76ca19e74210a0336c3b8380b97730df5cdf45f3e69e89000e5c")
+                  sha256="a7e87112fc49ad5b59e26726e3a7cae0ffae511cba5376c579ba3cb04483d6e2")
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
@@ -175,7 +175,7 @@ class FFMpegConan(ConanFile):
         if self.options.openssl:
             self.requires.add("openssl/1.1.1d")
         if self.options.cuda:
-            self.requires.add("ffnvcodec/9.0.18.1@omaralvarez/public-conan")
+            self.requires.add("ffnvcodec/10.0.26.0@omaralvarez/public-conan")
         if self.settings.os == "Windows":
             if self.options.qsv:
                 self.requires.add("intel_media_sdk/2018R2_1@bincrafters/stable")
