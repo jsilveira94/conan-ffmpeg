@@ -12,14 +12,14 @@ The packages generated with this **conanfile** can be found on [Bintray](https:/
 
 ### Basic setup
 
-    $ conan install ffmpeg/4.2@bincrafters/stable
+    $ conan install ffmpeg/4.3.1@bincrafters/stable
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    ffmpeg/4.2@bincrafters/stable
+    ffmpeg/4.3.1@bincrafters/stable
 
 
 Complete the installation of requirements for your project running:
