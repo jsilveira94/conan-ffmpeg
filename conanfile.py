@@ -69,7 +69,7 @@ class FFMpegConan(ConanFile):
                        'zmq': False,
                        'sdl2': False,
                        'x264': True,
-                       'x265': True,
+                       'x265': False,
                        'vpx': True,
                        'mp3lame': True,
                        'fdk_aac': True,
@@ -108,6 +108,7 @@ class FFMpegConan(ConanFile):
 
     def configure(self):
         del self.settings.compiler.libcxx
+        del self.settings.compiler.cppstd
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -145,29 +146,29 @@ class FFMpegConan(ConanFile):
         if self.options.lzma:
             self.requires.add("xz_utils/5.2.4")
         if self.options.iconv:
-            self.requires.add("libiconv/1.15")
+            self.requires.add("libiconv/1.16")
         if self.options.freetype:
-            self.requires.add("freetype/2.10.0")
+            self.requires.add("freetype/2.10.1")
         if self.options.openjpeg:
             self.requires.add("openjpeg/2.3.1")
         if self.options.openh264:
-            self.requires.add("openh264/1.7.0@bincrafters/stable")
+            self.requires.add("openh264/1.7.0")
         if self.options.vorbis:
-            self.requires.add("vorbis/1.3.6@bincrafters/stable")
+            self.requires.add("vorbis/1.3.6")
         if self.options.opus:
-            self.requires.add("opus/1.3.1@bincrafters/stable")
+            self.requires.add("opus/1.3.1")
         if self.options.zmq:
-            self.requires.add("zmq/4.3.1@bincrafters/stable")
+            self.requires.add("zeromq/4.3.2")
         if self.options.sdl2:
             self.requires.add("sdl2/2.0.9@bincrafters/stable")
         if self.options.x264:
             self.requires.add("libx264/20190605")
         if self.options.x265:
-            self.requires.add("libx265/3.0@bincrafters/stable")
+            self.requires.add("libx265/3.2.1")
         if self.options.vpx:
             self.requires.add("libvpx/1.8.0@bincrafters/stable")
         if self.options.mp3lame:
-            self.requires.add("libmp3lame/3.100@bincrafters/stable")
+            self.requires.add("libmp3lame/3.100")
         if self.options.fdk_aac:
             self.requires.add("libfdk_aac/2.0.0")
         if self.options.webp:
@@ -184,6 +185,8 @@ class FFMpegConan(ConanFile):
                 self.requires.add("libalsa/1.1.9")
             if self.options.xcb:
                 self.requires.add("libxcb/1.13.1@bincrafters/stable")
+            if self.options.pulse:
+                self.requires("pulseaudio/13.0@bincrafters/stable")
 
     def system_requirements(self):
         if self.settings.os == "Linux" and tools.os_info.is_linux:
@@ -191,8 +194,6 @@ class FFMpegConan(ConanFile):
                 installer = tools.SystemPackageTool()
 
                 packages = []
-                if self.options.pulse:
-                    packages.append('libpulse-dev')
                 if self.options.vaapi:
                     packages.append('libva-dev')
                 if self.options.vdpau:
@@ -253,6 +254,10 @@ class FFMpegConan(ConanFile):
             args.append('--pkg-config-flags=--static')
             if self.settings.build_type == 'Debug':
                 args.extend(['--disable-optimizations', '--disable-mmx', '--disable-stripping', '--enable-debug'])
+            if 'CC' in os.environ:
+                args.append('--cc=%s' % os.environ['CC'])
+            if 'CXX' in os.environ:
+                args.append('--cxx=%s' % os.environ['CXX'])
             if self._is_msvc:
                 args.append('--toolchain=msvc')
                 args.append('--extra-cflags=-%s' % self.settings.compiler.runtime)
@@ -380,10 +385,6 @@ class FFMpegConan(ConanFile):
             self.cpp_info.sharedlinkflags = self.cpp_info.exelinkflags
         elif self.settings.os == "Linux":
             self.cpp_info.libs.extend(['dl', 'pthread'])
-            if self.options.alsa:
-                self.cpp_info.libs.append('asound')
-            if self.options.pulse:
-                self.cpp_info.libs.append('pulse')
             if self.options.vaapi:
                 self.cpp_info.libs.extend(['va', 'va-drm', 'va-x11'])
             if self.options.vdpau:
