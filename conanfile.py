@@ -69,7 +69,7 @@ class FFMpegConan(ConanFile):
                        'zmq': False,
                        'sdl2': False,
                        'x264': True,
-                       'x265': False,
+                       'x265': True,
                        'vpx': True,
                        'mp3lame': True,
                        'fdk_aac': True,
