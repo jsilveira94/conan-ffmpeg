@@ -285,6 +285,9 @@ class FFMpegConan(ConanFile):
             args.append('--enable-libfdk-aac' if self.options.fdk_aac else '--disable-libfdk-aac')
             args.append('--enable-libwebp' if self.options.webp else '--disable-libwebp')
             args.append('--enable-openssl' if self.options.openssl else '--disable-openssl')
+            
+            
+            args.append('--enable-librtmp')
 
             if self.options.x264 or self.options.x265 or self.options.postproc:
                 args.append('--enable-gpl')
